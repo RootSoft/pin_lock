@@ -13,24 +13,24 @@ class SetuplocalauthCubit extends Cubit<SetupStage> {
     final lastState = state;
     if (lastState is Base) {
       final isPinAuthEnabled = await authenticator.isPinAuthenticationEnabled();
-      emit(
-        lastState.copyWith(
-          isPinAuthEnabled: isPinAuthEnabled,
-          isLoading: false,
-        ),
-      );
-
-      if (!isPinAuthEnabled) {
-        emit(
-          lastState.copyWith(
-            isBiometricAuthAvailable: false,
-            isBiometricAuthEnabled: false,
-            isLoading: false,
-            isPinAuthEnabled: isPinAuthEnabled,
-          ),
-        );
-        return;
-      }
+      // emit(
+      //   lastState.copyWith(
+      //     isPinAuthEnabled: isPinAuthEnabled,
+      //     isLoading: false,
+      //   ),
+      // );
+      //
+      // if (!isPinAuthEnabled) {
+      //   emit(
+      //     lastState.copyWith(
+      //       isBiometricAuthAvailable: false,
+      //       isBiometricAuthEnabled: false,
+      //       isLoading: false,
+      //       isPinAuthEnabled: isPinAuthEnabled,
+      //     ),
+      //   );
+      //   return;
+      // }
 
       final biometrics =
           await authenticator.getBiometricAuthenticationAvailability();

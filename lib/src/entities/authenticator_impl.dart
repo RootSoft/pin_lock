@@ -227,13 +227,15 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
     if (!isSupported) {
       return const Unavailable(reason: LocalAuthFailure.notAvailable);
     }
-    final storedValue = await _repository.isBiometricAuthenticationEnabled(userId: userId);
+    final storedValue =
+        await _repository.isBiometricAuthenticationEnabled(userId: userId);
     return Available(isEnabled: storedValue ?? false);
   }
 
   @override
   Future<bool> isPinAuthenticationEnabled() async {
-    final storedValue = await _repository.isPinAuthenticationEnabled(userId: userId);
+    final storedValue =
+        await _repository.isPinAuthenticationEnabled(userId: userId);
     return storedValue ?? false;
   }
 
@@ -270,7 +272,8 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
   Future<Either<LocalAuthFailure, Unit>> unlockWithBiometrics({
     required String userFacingExplanation,
   }) async {
-    final biometricAvailability = await getBiometricAuthenticationAvailability();
+    final biometricAvailability =
+        await getBiometricAuthenticationAvailability();
     if (biometricAvailability is Available) {
       if (!biometricAvailability.isEnabled) {
         _lockController.lock(availableMethods: const []);
@@ -333,9 +336,11 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
   }
 
   Future<bool> _isLockedDueToTooManyAttempts() async {
-    final failedAttemptsList = await _repository.getListOfFailedAttempts(userId: userId);
+    final failedAttemptsList =
+        await _repository.getListOfFailedAttempts(userId: userId);
     if (failedAttemptsList.length >= maxTries) {
-      if (DateTime.now().difference(failedAttemptsList.last) < lockedOutDuration) {
+      if (DateTime.now().difference(failedAttemptsList.last) <
+          lockedOutDuration) {
         return true;
       }
     }
@@ -343,24 +348,32 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
   }
 
   Future<void> _checkInitialLockStatus() async {
-    final isEnabled = await isPinAuthenticationEnabled();
-    if (!isEnabled) {
-      _lockController.unlock();
-    } else {
-      _lockWithBiometricMethods();
-    }
+    /// TODO ENABLE IF PIN IS REQUIRED
+    // final isEnabled = await isPinAuthenticationEnabled();
+    // if (!isEnabled) {
+    //   _lockController.unlock();
+    // } else {
+    //   _lockWithBiometricMethods();
+    // }
+
+    _lockWithBiometricMethods();
   }
 
   Future<void> _lockWithBiometricMethods() async {
     final biometric = await getBiometricAuthenticationAvailability();
     if (biometric is Available) {
-      _lockController.lock(
-        availableMethods: biometric.isEnabled
-            ? await getAvailableBiometricMethods()
-            : const [],
-      );
+      if (biometric.isEnabled) {
+        _lockController.lock(
+          availableMethods: biometric.isEnabled
+              ? await getAvailableBiometricMethods()
+              : const [],
+        );
+      } else {
+        _lockController.unlock();
+      }
     }
     if (biometric is Unavailable) {
+      //_lockController.unlock();
       _lockController.lock(availableMethods: const []);
     }
   }

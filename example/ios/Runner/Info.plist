@@ -43,5 +43,9 @@
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>You can use biometric authentication to secure access to your data.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>
