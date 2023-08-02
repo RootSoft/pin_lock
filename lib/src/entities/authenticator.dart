@@ -58,6 +58,9 @@ abstract class Authenticator with WidgetsBindingObserver {
   /// Enables biometric authentication for user.
   Future<Either<LocalAuthFailure, Unit>> enableBiometricAuthentication();
 
+  /// Enables biometric authentication for user.
+  Future<bool> authenticate({required String userFacingExplanation});
+
   /// Enables pin authentication, making sure that [pin] and [confirmationPin] match
   Future<Either<LocalAuthFailure, Unit>> enablePinAuthentication({
     required Pin pin,

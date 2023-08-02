@@ -377,6 +377,14 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
       _lockController.lock(availableMethods: const []);
     }
   }
+
+  @override
+  Future<bool> authenticate({required String userFacingExplanation}) async {
+    return _biometricAuth.authenticate(
+      localizedReason: userFacingExplanation,
+      options: const AuthenticationOptions(biometricOnly: true),
+    );
+  }
 }
 
 extension on PlatformException {
