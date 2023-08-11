@@ -373,8 +373,8 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
       }
     }
     if (biometric is Unavailable) {
-      //_lockController.unlock();
-      _lockController.lock(availableMethods: const []);
+      _lockController.unlock();
+      //_lockController.lock(availableMethods: const []);
     }
   }
 
