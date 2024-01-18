@@ -80,7 +80,9 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
     }
 
     /// Keep track of the last known state
-    _lastState = state;
+    if (state != AppLifecycleState.hidden) {
+      _lastState = state;
+    }
   }
 
   /// -- Setup authentication --
