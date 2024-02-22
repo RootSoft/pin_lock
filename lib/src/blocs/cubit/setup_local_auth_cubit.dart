@@ -13,27 +13,26 @@ class SetuplocalauthCubit extends Cubit<SetupStage> {
     final lastState = state;
     if (lastState is Base) {
       final isPinAuthEnabled = await authenticator.isPinAuthenticationEnabled();
-      // emit(
-      //   lastState.copyWith(
-      //     isPinAuthEnabled: isPinAuthEnabled,
-      //     isLoading: false,
-      //   ),
-      // );
-      //
-      // if (!isPinAuthEnabled) {
-      //   emit(
-      //     lastState.copyWith(
-      //       isBiometricAuthAvailable: false,
-      //       isBiometricAuthEnabled: false,
-      //       isLoading: false,
-      //       isPinAuthEnabled: isPinAuthEnabled,
-      //     ),
-      //   );
-      //   return;
-      // }
+      emit(
+        lastState.copyWith(
+          isPinAuthEnabled: isPinAuthEnabled,
+          isLoading: false,
+        ),
+      );
 
-      final biometrics =
-          await authenticator.getBiometricAuthenticationAvailability();
+      if (!isPinAuthEnabled) {
+        emit(
+          lastState.copyWith(
+            isBiometricAuthAvailable: false,
+            isBiometricAuthEnabled: false,
+            isLoading: false,
+            isPinAuthEnabled: isPinAuthEnabled,
+          ),
+        );
+        return;
+      }
+
+      final biometrics = await authenticator.getBiometricAuthenticationAvailability();
       if (biometrics is Available) {
         emit(
           lastState.copyWith(
@@ -63,8 +62,7 @@ class SetuplocalauthCubit extends Cubit<SetupStage> {
   Future<void> toggleBiometricAuthentication() async {
     final lastState = state;
     if (lastState is Base) {
-      final biometricAvailability =
-          await authenticator.getBiometricAuthenticationAvailability();
+      final biometricAvailability = await authenticator.getBiometricAuthenticationAvailability();
       if (biometricAvailability is Available) {
         final result = biometricAvailability.isEnabled
             ? await authenticator.disableBiometricAuthentication()

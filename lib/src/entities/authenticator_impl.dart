@@ -50,9 +50,9 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
     super.didChangeAppLifecycleState(state);
 
     // don't do anything if pin is disabled
-    // if (!(await isPinAuthenticationEnabled())) {
-    //   return;
-    // }
+    if (!(await isPinAuthenticationEnabled())) {
+      return;
+    }
 
     switch (state) {
       case AppLifecycleState.inactive:
@@ -344,31 +344,35 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
   }
 
   Future<void> _checkInitialLockStatus() async {
-    /// TODO ENABLE IF PIN IS REQUIRED
-    // final isEnabled = await isPinAuthenticationEnabled();
-    // if (!isEnabled) {
-    //   _lockController.unlock();
-    // } else {
-    //   _lockWithBiometricMethods();
-    // }
+    final isEnabled = await isPinAuthenticationEnabled();
+    if (!isEnabled) {
+      _lockController.unlock();
+    } else {
+      _lockWithBiometricMethods();
+    }
 
-    _lockWithBiometricMethods();
+    // _lockWithBiometricMethods();
   }
 
   Future<void> _lockWithBiometricMethods() async {
     final biometric = await getBiometricAuthenticationAvailability();
     if (biometric is Available) {
-      if (biometric.isEnabled) {
-        _lockController.lock(
-          availableMethods: biometric.isEnabled ? await getAvailableBiometricMethods() : const [],
-        );
-      } else {
-        _lockController.unlock();
-      }
+      _lockController.lock(
+        availableMethods: biometric.isEnabled ? await getAvailableBiometricMethods() : const [],
+      );
+
+      // if (biometric.isEnabled) {
+      //   _lockController.lock(
+      //     availableMethods: biometric.isEnabled ? await getAvailableBiometricMethods() : const [],
+      //   );
+      // } else {
+      //   _lockController.unlock();
+      // }
     }
+
     if (biometric is Unavailable) {
-      _lockController.unlock();
-      //_lockController.lock(availableMethods: const []);
+      //_lockController.unlock();
+      _lockController.lock(availableMethods: const []);
     }
   }
 
