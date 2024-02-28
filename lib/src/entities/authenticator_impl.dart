@@ -24,7 +24,7 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
   AppLifecycleState? _lastState;
 
   @override
-  final UserId userId;
+  UserId userId;
 
   AuthenticatorImpl(
     this._repository,
@@ -36,6 +36,11 @@ class AuthenticatorImpl with WidgetsBindingObserver implements Authenticator {
     this.pinLength,
     this.userId,
   );
+
+  @override
+  void setUserId(UserId userId) {
+    this.userId = userId;
+  }
 
   @override
   Stream<LockState> get lockState {

@@ -26,6 +26,8 @@ abstract class Authenticator with WidgetsBindingObserver {
   /// The expected lenght of the pin, used to draw the [PinInputWidget]
   int get pinLength;
 
+  void setUserId(UserId userId);
+
   /// A string value used as a key for storing current user's preferences. Enables multiple users
   /// to use the app on the same device, while preserving unique pin values and preferences of the users
   /// regardless of logging in and out.
