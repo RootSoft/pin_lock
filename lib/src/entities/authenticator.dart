@@ -13,7 +13,7 @@ abstract class Authenticator with WidgetsBindingObserver {
   Duration get lockAfterDuration;
 
   /// Emits a [LockState] event every time the state is changed
-  Stream<LockState> get lockState;
+  Stream<PinLockState> get lockState;
 
   /// The number of times that a pin can be entered incorrectly, before the app
   /// stops accepting unlock attempts for [lockedOutDuration]
